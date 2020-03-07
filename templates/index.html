@@ -1,0 +1,70 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <title>Cloud Foundry App</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+  	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  	<!-- Bootstrap -->
+		<link href="/static/bootstrap/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/all.css" integrity="sha384-50oBUHEmvpQ+1lW4y57PTFmhCaXp0ML5d60M1M7uH2+nqUivzIebhndOJK28anvf" crossorigin="anonymous">
+  	<link href="/static/css/style.css" rel="stylesheet" />
+  </head>
+  <body>
+    <div class="container">
+
+  	  <div class="row">
+  	  	<div class="col-md">
+  	  	  <img src="/static/images/cf-logo.png" class="img-fluid mx-auto d-block logo" alt="Cloud Foundry Logo" />
+  	  	</div>
+  	  </div>
+
+  	  <div class="row">
+  	  	<div class="col-md">
+  	  	  <p class="lead text-center">Congratulations! You have a running app.</p>
+  	  	</div>
+  	  </div>
+
+      <div class="row justify-content-md-center app-details">
+        <dl class="row">
+          <dt class="col-sm-3 text-right">App Name</dt>
+          <dd class="col-sm-9">{{.AppName}}</dd>
+          <dt class="col-sm-3 text-right">App Instance Index</dt>
+					<dd class="col-sm-9">{{.AppInstanceIndex}}</dd>
+					<dt class="col-sm-3 text-right">App Instance GUID</dt>
+          <dd class="col-sm-9">{{.AppInstanceGUID}}</dd>
+          <dt class="col-sm-3 text-right">Space Name</dt>
+					<dd class="col-sm-9">{{.SpaceName}}</dd>
+					<dt class="col-sm-3 text-right">Services</dt>
+					<dd class="col-sm-9">
+						<ul>
+						{{range .Services}}
+							<li>{{.Name}} ({{.Label}})</li>
+						{{end}}
+						</ul>
+					</dd>
+					<dt class="col-sm-3 text-right">Training Environment Variables</dt>
+					<dd class="col-sm-9">
+						<ul>
+						{{range .Envars}}
+							<li>{{.}}</li>
+						{{end}}
+						</ul>
+					</dd>
+        </dl>
+			</div>
+			
+			<div class="footer">
+				<div class="row align-items-end">
+					<div class="col">
+						<a href="https://github.com/rscale-training/training-app"><i class="fab fa-github"></i></a> | Created by <a href="https://rscale.io">Resilient Scale</a>
+					</div>
+				</div>
+			</div>
+
+      <script src="/static/bootstrap/js/bootstrap.min.js"></script>
+
+    </div>
+  </body>
+
+
+</html>
