@@ -6,7 +6,7 @@ applications:
   disk_quota: 256M
   path: ./sample-app.zip
   routes:
-  - ((route))
+  - route: ((route))
   buildpacks:
   - go_buildpack
   env:
