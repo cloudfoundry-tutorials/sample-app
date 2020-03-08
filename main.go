@@ -93,6 +93,7 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if err := t.ExecuteTemplate(w, "index", index); err != nil {
+			log.Fatal(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
