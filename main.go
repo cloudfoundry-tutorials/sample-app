@@ -38,6 +38,18 @@ func main() {
 	var templatesBox = packr.New("Templates", "./templates")
 	var staticBox = packr.New("Static", "./static")
 
+	templateIndex, err := templatesBox.FindString("index.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	templateKill, err := templatesBox.FindString("kill.html")
+	if err != nil {
+		log.Fatal(err)
+	}
+	t := template.New("")
+	t.Parse(templateIndex)
+	t.Parse(templateKill)
+
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
 			http.FileServer(staticBox)))
@@ -80,12 +92,6 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		templateIndex, err := templatesBox.FindString("index.html")
-		if err != nil {
-			log.Fatal(err)
-		}
-		t := template.New("")
-		t.Parse(templateIndex)
 		if err := t.ExecuteTemplate(w, "index", index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -96,12 +102,6 @@ func main() {
 	})
 
 	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
-		templateKill, err := templatesBox.FindString("kill.html")
-		if err != nil {
-			log.Fatal(err)
-		}
-		t := template.New("")
-		t.Parse(templateKill)
 		if err := t.ExecuteTemplate(w, "kill", index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
