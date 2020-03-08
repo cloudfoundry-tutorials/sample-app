@@ -46,14 +46,15 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	t := template.New("")
-	indexTemplate, err := t.Parse(templateIndex)
+	t1 := template.New("")
+	indexTemplate, err := t1.Parse(templateIndex)
 	if err != nil {
 		log.Fatal(err)
 	}
 	//log.Print(indexTemplate)
 
-	killTemplate, err := t.Parse(templateKill)
+	t2 := template.New("")
+	killTemplate, err := t2.Parse(templateKill)
 	if err != nil {
 		log.Fatal(err)
 	}
