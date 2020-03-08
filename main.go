@@ -47,10 +47,17 @@ func main() {
 		log.Fatal(err)
 	}
 	t := template.New("")
-	t.Parse(templateIndex)
-	t.Parse(templateKill)
+	indexTemplate, err := t.Parse(templateIndex)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//log.Print(indexTemplate)
 
-	log.Print(t.DefinedTemplates)
+	killTemplate, err := t.Parse(templateKill)
+	if err != nil {
+		log.Fatal(err)
+	}
+	//log.Print(killTemplate)
 
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
@@ -94,7 +101,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if err := t.ExecuteTemplate(w, "index", index); err != nil {
+		if err := indexTemplate.Execute(w, index); err != nil {
 			log.Print(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
@@ -105,7 +112,7 @@ func main() {
 	})
 
 	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
-		if err := t.ExecuteTemplate(w, "kill", index); err != nil {
+		if err := killTemplate.Execute(w, index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
