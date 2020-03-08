@@ -50,6 +50,8 @@ func main() {
 	t.Parse(templateIndex)
 	t.Parse(templateKill)
 
+	log.Print(t.DefinedTemplates)
+
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
 			http.FileServer(staticBox)))
@@ -93,7 +95,7 @@ func main() {
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		if err := t.ExecuteTemplate(w, "index", index); err != nil {
-			log.Fatal(err)
+			log.Print(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
