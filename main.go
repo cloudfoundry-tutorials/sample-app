@@ -35,8 +35,8 @@ func main() {
 	index := Index{"Unknown", -1, "Unknown", []string{}, []Service{}, "Unknown"}
 
 	//template := template.Must(template.ParseFiles("./templates/index.html", "./templates/kill.html"))
-	var templatesBox = packr.New("Templates", "../templates")
-	var staticBox = packr.New("Static", "../static")
+	var templatesBox = packr.New("Templates", "./templates")
+	var staticBox = packr.New("Static", "./static")
 
 	templateIndex, err := templatesBox.FindString("index.html")
 	if err != nil {
@@ -92,7 +92,7 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if err := t.ExecuteTemplate(w, "index.html", index); err != nil {
+		if err := t.ExecuteTemplate(w, "index", index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
@@ -102,7 +102,7 @@ func main() {
 	})
 
 	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
-		if err := t.ExecuteTemplate(w, "kill.html", index); err != nil {
+		if err := t.ExecuteTemplate(w, "kill", index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 
