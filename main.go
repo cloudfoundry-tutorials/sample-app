@@ -8,6 +8,8 @@ import (
 	"os"
 	"strings"
 
+	"github.com/gobuffalo/packr/v2"
+
 	cfenv "github.com/cloudfoundry-community/go-cfenv"
 )
 
@@ -32,11 +34,13 @@ func main() {
 
 	index := Index{"Unknown", -1, "Unknown", []string{}, []Service{}, "Unknown"}
 
-	template := template.Must(template.ParseFiles("templates/index.html", "templates/kill.html"))
+	//template := template.Must(template.ParseFiles("./templates/index.html", "./templates/kill.html"))
+	var templatesBox = packr.New("Templates", "./templates")
+	var staticBox = packr.New("Static", "./static")
 
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
-			http.FileServer(http.Dir("static"))))
+			http.FileServer(staticBox)))
 
 	if cfenv.IsRunningOnCF() {
 		appEnv, err := cfenv.Current()
@@ -76,15 +80,35 @@ func main() {
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if err := template.ExecuteTemplate(w, "index.html", index); err != nil {
+		templateIndex, err := templatesBox.FindString("index.html")
+		if err != nil {
+			log.Fatal(err)
+		}
+		t := template.New("")
+		t.Parse(templateIndex)
+		if err := t.ExecuteTemplate(w, "index", index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+
+		// if err := template.ExecuteTemplate(w, "index.html", index); err != nil {
+		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+		// }
 	})
 
 	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
-		if err := template.ExecuteTemplate(w, "kill.html", index); err != nil {
+		templateKill, err := templatesBox.FindString("kill.html")
+		if err != nil {
+			log.Fatal(err)
+		}
+		t := template.New("")
+		t.Parse(templateKill)
+		if err := t.ExecuteTemplate(w, "kill", index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
+
+		// if err := template.ExecuteTemplate(w, "kill.html", index); err != nil {
+		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
+		// }
 
 	})
 
