@@ -6,7 +6,6 @@ import (
 	"log"
 	"net/http"
 	"os"
-	"strings"
 
 	"github.com/gobuffalo/packr/v2"
 
@@ -42,23 +41,11 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	templateKill, err := templatesBox.FindString("kill.html")
+	template := template.New("")
+	indexTemplate, err := template.Parse(templateIndex)
 	if err != nil {
 		log.Fatal(err)
 	}
-	t1 := template.New("")
-	indexTemplate, err := t1.Parse(templateIndex)
-	if err != nil {
-		log.Fatal(err)
-	}
-	//log.Print(indexTemplate)
-
-	t2 := template.New("")
-	killTemplate, err := t2.Parse(templateKill)
-	if err != nil {
-		log.Fatal(err)
-	}
-	//log.Print(killTemplate)
 
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
@@ -86,19 +73,6 @@ func main() {
 				index.Services = append(index.Services, Service{svc.Name, svc.Label})
 			}
 		}
-		for _, envar := range os.Environ() {
-			if strings.HasPrefix(envar, "TRAINING_") {
-				index.Envars = append(index.Envars, envar)
-			}
-		}
-
-		// config := DBConfig{
-		// 	Hostname: os.Getenv("HOSTNAME"),
-		// 	Name:     os.Getenv("NAME"),
-		// 	Password: os.Getenv("PASSWORD"),
-		// 	Username: os.Getenv("USERNAME"),
-		// }
-
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
@@ -106,24 +80,9 @@ func main() {
 			log.Print(err)
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
-
-		// if err := template.ExecuteTemplate(w, "index.html", index); err != nil {
-		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-		// }
 	})
 
 	http.HandleFunc("/kill", func(w http.ResponseWriter, r *http.Request) {
-		if err := killTemplate.Execute(w, index); err != nil {
-			http.Error(w, err.Error(), http.StatusInternalServerError)
-		}
-
-		// if err := template.ExecuteTemplate(w, "kill.html", index); err != nil {
-		// 	http.Error(w, err.Error(), http.StatusInternalServerError)
-		// }
-
-	})
-
-	http.HandleFunc("/killInstance", func(w http.ResponseWriter, r *http.Request) {
 		os.Exit(1)
 	})
 
