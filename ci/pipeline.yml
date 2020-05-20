@@ -45,7 +45,7 @@ resources:
 - name: rc-manifest
   type: s3
   source:
-    regexp: sample-app/rc/manifest-(.*).zip
+    regexp: sample-app/rc/manifest-(.*).yml
     bucket: tutorials.cff.rscale.io
     access_key_id: ((aws_access_key_id))
     secret_access_key: ((aws_secret_access_key))
