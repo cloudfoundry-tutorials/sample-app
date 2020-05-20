@@ -98,7 +98,7 @@ jobs:
   - put: rc-app
     params: {file: rc/sample-app-*.zip}
   - put: rc-manifest
-    params: {file: rc/manifest-*.zip}
+    params: {file: rc/manifest-*.yml}
   - put: version
     params: {file: version/version}  
 
