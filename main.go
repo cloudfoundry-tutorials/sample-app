@@ -7,8 +7,6 @@ import (
 	"net/http"
 	"os"
 
-	"github.com/gobuffalo/packr/v2"
-
 	cfenv "github.com/cloudfoundry-community/go-cfenv"
 )
 
@@ -17,10 +15,7 @@ type Index struct {
 	AppName          string
 	AppInstanceIndex int
 	AppInstanceGUID  string
-	// Database         string
-	Envars    []string
-	Services  []Service
-	SpaceName string
+	Services         []Service
 }
 
 //Service holds the name and label of a service instance
@@ -31,25 +26,13 @@ type Service struct {
 
 func main() {
 
-	index := Index{"Unknown", -1, "Unknown", []string{}, []Service{}, "Unknown"}
+	index := Index{"Unknown", -1, "Unknown", []Service{}}
 
-	//template := template.Must(template.ParseFiles("./templates/index.html", "./templates/kill.html"))
-	var templatesBox = packr.New("Templates", "./templates")
-	var staticBox = packr.New("Static", "./static")
-
-	templateIndex, err := templatesBox.FindString("index.html")
-	if err != nil {
-		log.Fatal(err)
-	}
-	template := template.New("")
-	indexTemplate, err := template.Parse(templateIndex)
-	if err != nil {
-		log.Fatal(err)
-	}
+	template := template.Must(template.ParseFiles("templates/index.html"))
 
 	http.Handle("/static/",
 		http.StripPrefix("/static/",
-			http.FileServer(staticBox)))
+			http.FileServer(http.Dir("static"))))
 
 	if cfenv.IsRunningOnCF() {
 		appEnv, err := cfenv.Current()
@@ -65,19 +48,19 @@ func main() {
 		if appEnv.InstanceID != "" {
 			index.AppInstanceGUID = appEnv.InstanceID
 		}
-		if appEnv.SpaceName != "" {
-			index.SpaceName = appEnv.SpaceName
-		}
 		for _, svcs := range appEnv.Services {
 			for _, svc := range svcs {
 				index.Services = append(index.Services, Service{svc.Name, svc.Label})
 			}
 		}
+
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		if err := indexTemplate.Execute(w, index); err != nil {
-			log.Print(err)
+		w.Header().Set("Cache-Control", "no-cache, no-store, must-revalidate") // HTTP 1.1.
+		w.Header().Set("Pragma", "no-cache")                                   // HTTP 1.0.
+		w.Header().Set("Expires", "0")                                         // Proxies.
+		if err := template.ExecuteTemplate(w, "index.html", index); err != nil {
 			http.Error(w, err.Error(), http.StatusInternalServerError)
 		}
 	})
