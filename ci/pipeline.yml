@@ -69,24 +69,24 @@ resources:
 
 jobs:
  
-- name: unit-test
-  plan:
-  - in_parallel:
-    - get: source
-      trigger: true
-      params: {depth: 1}
-    - get: ci
-      trigger: true
-      params: {depth: 1}
-  - task: unit-test
-    file: ci/ci/tasks/unit-test.yml
+# - name: unit-test
+#   plan:
+#   - in_parallel:
+#     - get: source
+#       trigger: true
+#       params: {depth: 1}
+#     - get: ci
+#       trigger: true
+#       params: {depth: 1}
+#   - task: unit-test
+#     file: ci/ci/tasks/unit-test.yml
 
 - name: package
   serial_groups: [version]
   plan:
   - in_parallel:
     - get: source
-      passed: [unit-test]
+      # passed: [unit-test]
       trigger: true
       params: {depth: 1}
     - get: ci
