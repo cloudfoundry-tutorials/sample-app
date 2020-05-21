@@ -4,7 +4,7 @@ resources:
 
 - name: ci
   type: git
-  icon: github-box
+  icon: concourse-ci
   source:
     uri: https://github.com/cloudfoundry-tutorials/sample-app.git
     branch: master
@@ -14,7 +14,7 @@ resources:
 
 - name: source
   type: git
-  icon: github-box
+  icon: source-repository
   source:
     uri: https://github.com/cloudfoundry-tutorials/sample-app.git
     branch: master
@@ -24,6 +24,7 @@ resources:
 
 - name: version
   type: semver
+  icon: alpha-v-circle-outline
   source:
     driver: s3
     initial_version: 0.0.1
@@ -35,6 +36,7 @@ resources:
 
 - name: rc-app
   type: s3
+  icon: water
   source:
     regexp: sample-app/rc/sample-app-(.*).zip
     bucket: tutorials.cff.rscale.io
@@ -44,6 +46,7 @@ resources:
 
 - name: rc-manifest
   type: s3
+  icon: note-text-outline
   source:
     regexp: sample-app/rc/manifest-(.*).yml
     bucket: tutorials.cff.rscale.io
@@ -53,6 +56,7 @@ resources:
 
 - name: release-notes
   type: git
+  icon: text
   source:
     uri: https://github.com/cloudfoundry-tutorials/sample-app.git
     branch: master
@@ -62,6 +66,7 @@ resources:
 
 - name: gh-release
   type: github-release
+  icon: tag
   source:
     owner: cloudfoundry-tutorials
     repository: sample-app
