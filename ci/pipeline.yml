@@ -20,7 +20,7 @@ resources:
     branch: master
     username: ((github_username))
     password: ((github_password))
-    ignore_paths: [ci/*,README.md,LICENSE,NOTICE]
+    ignore_paths: [ci/*,README.md,LICENSE,NOTICE,release-notes/*]
 
 - name: version
   type: semver
