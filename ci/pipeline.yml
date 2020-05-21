@@ -113,7 +113,7 @@ jobs:
       trigger: true
     - get: ci
       params: {depth: 1}
-  - task: provision-vm
+  - task: test-app-basics
     file: ci/ci/tasks/integration-test.yml
     params:
       CF_API: ((sample-app/cf_api))

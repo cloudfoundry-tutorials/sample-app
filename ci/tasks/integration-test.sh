@@ -42,6 +42,8 @@ mkdir temp
 cp rc-app/sample-app-*.zip temp/sample-app.zip
 cp rc-manifest/manifest-*.yml temp/manifest.yml
 
+cat temp/manifest.yml
+
 pushd temp
 	cf push --var route="{$CF_ROUTE}"
 popd
