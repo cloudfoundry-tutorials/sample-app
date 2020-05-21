@@ -4,7 +4,11 @@ set -ex
 
 check_expected_msg() {
 	local msg=$1
-	$(curl $CF_ROUTE | grep "$msg") || "Test FAILED: Expected to find message: $msg" && exit 1
+	local found_msg=$(curl $CF_ROUTE | grep "$msg")
+	if [ "$found_msg" == "" ]; then
+		echo "Test FAILED: Expected to find message: $msg" 
+	  exit 1
+	fi
 }
 
 check_load_balancing() {
