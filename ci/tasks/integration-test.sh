@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -e
+set -ex
 
 check_expected_msg() {
 	local msg=$1
@@ -45,7 +45,7 @@ cp rc-manifest/manifest-*.yml temp/manifest.yml
 cat temp/manifest.yml
 
 pushd temp
-	cf push --var route="{$CF_ROUTE}"
+	cf push --var route=$CF_ROUTE
 popd
 
 check_expected_msg "Congratulations! You have a running app."
