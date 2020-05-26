@@ -1,6 +1,6 @@
 #!/bin/bash
 
-set -ex
+set -e
 
 check_expected_msg() {
 	local msg=$1
