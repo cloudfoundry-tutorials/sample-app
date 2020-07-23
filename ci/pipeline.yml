@@ -7,7 +7,7 @@ resources:
   icon: concourse-ci
   source:
     uri: https://github.com/cloudfoundry-tutorials/sample-app.git
-    branch: master
+    branch: main
     username: ((github_username))
     password: ((github_password))
     paths: [ci/*]
@@ -17,7 +17,7 @@ resources:
   icon: source-repository
   source:
     uri: https://github.com/cloudfoundry-tutorials/sample-app.git
-    branch: master
+    branch: main
     username: ((github_username))
     password: ((github_password))
     ignore_paths: [ci/*,README.md,LICENSE,NOTICE,release-notes/*]
@@ -59,7 +59,7 @@ resources:
   icon: text
   source:
     uri: https://github.com/cloudfoundry-tutorials/sample-app.git
-    branch: master
+    branch: main
     username: ((github_username))
     password: ((github_password))
     paths: [release-notes/*]
