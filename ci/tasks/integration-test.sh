@@ -71,3 +71,10 @@ if [[ "$kill_status" != 502 ]]; then
 fi
 sleep 5
 check_load_balancing "App did not recover after kill"
+
+# Training envars
+
+cf set-env first-push TRAINING_KEY_1 training-value-1
+cf restart first-push
+
+check_expected_msg "training-value-1"

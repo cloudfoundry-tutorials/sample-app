@@ -6,6 +6,7 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"strings"
 
 	cfenv "github.com/cloudfoundry-community/go-cfenv"
 )
@@ -15,7 +16,9 @@ type Index struct {
 	AppName          string
 	AppInstanceIndex int
 	AppInstanceGUID  string
+	Envars           []string
 	Services         []Service
+	SpaceName        string
 }
 
 //Service holds the name and label of a service instance
@@ -26,7 +29,7 @@ type Service struct {
 
 func main() {
 
-	index := Index{"Unknown", -1, "Unknown", []Service{}}
+	index := Index{"Unknown", -1, "Unknown", []string{}, []Service{}, "Unknown"}
 
 	template := template.Must(template.ParseFiles("templates/index.html"))
 
@@ -48,12 +51,19 @@ func main() {
 		if appEnv.InstanceID != "" {
 			index.AppInstanceGUID = appEnv.InstanceID
 		}
+		if appEnv.SpaceName != "" {
+			index.SpaceName = appEnv.SpaceName
+		}
 		for _, svcs := range appEnv.Services {
 			for _, svc := range svcs {
 				index.Services = append(index.Services, Service{svc.Name, svc.Label})
 			}
 		}
-
+		for _, envar := range os.Environ() {
+			if strings.HasPrefix(envar, "TRAINING_") {
+				index.Envars = append(index.Envars, envar)
+			}
+		}
 	}
 
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
