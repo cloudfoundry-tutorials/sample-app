@@ -12,6 +12,14 @@ resources:
     password: ((github_password))
     paths: [ci/*]
 
+- name: pipeline-source
+  type: git
+  source:
+    uri: https://github.com/cloudfoundry-tutorials/sample-app.git
+    username: ((github_username))
+    password: ((github_password))
+    paths: [ci/pipeline.yml]
+
 - name: source
   type: git
   icon: source-repository
@@ -85,6 +93,16 @@ jobs:
 #       params: {depth: 1}
 #   - task: unit-test
 #     file: ci/ci/tasks/unit-test.yml
+
+- name: configure-pipeline
+  serial_groups: [execute]
+  plan:
+  - in_parallel:
+    - get: pipeline-source
+      trigger: true
+      params: {depth: 1}
+  - set_pipeline: self
+    file: pipeline-source/ci/reports/pipeline.yml
 
 - name: package
   serial_groups: [version]
