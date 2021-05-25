@@ -102,7 +102,7 @@ jobs:
       trigger: true
       params: {depth: 1}
   - set_pipeline: self
-    file: pipeline-source/ci/reports/pipeline.yml
+    file: pipeline-source/ci/pipeline.yml
 
 - name: package
   serial_groups: [version]
