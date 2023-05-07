@@ -8,4 +8,6 @@ applications:
   routes:
   - route: ((route))
   buildpacks:
-  - go_buildpack
+  - https://github.com/cloudfoundry/go-buildpack.git#v1.10.9
+  stack: cflinuxfs3
+  
